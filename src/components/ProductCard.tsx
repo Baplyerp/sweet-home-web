@@ -1,12 +1,16 @@
+"use client";
+
 import Link from 'next/link';
 import { Produto } from '@/lib/mockData';
+import { useCart } from '@/contexts/CartContext';
 
 interface ProductCardProps {
   produto: Produto;
 }
 
 export default function ProductCard({ produto }: ProductCardProps) {
-  // Função simples para formatar o preço em Reais
+  const { adicionarItem } = useCart();
+
   const formatarPreco = (valor: number) => {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
@@ -14,7 +18,6 @@ export default function ProductCard({ produto }: ProductCardProps) {
   return (
     <div className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-brand/10 relative">
       
-      {/* Etiquetas Flutuantes */}
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
         {produto.esgotado && (
           <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
@@ -28,7 +31,6 @@ export default function ProductCard({ produto }: ProductCardProps) {
         )}
       </div>
 
-      {/* Imagem com Efeito de Zoom no Hover */}
       <Link href={`/produtos/${produto.id}`} className="relative h-64 overflow-hidden bg-gray-100">
         <img 
           src={produto.imagem} 
@@ -37,7 +39,6 @@ export default function ProductCard({ produto }: ProductCardProps) {
         />
       </Link>
 
-      {/* Detalhes do Produto */}
       <div className="p-5 flex flex-col flex-grow">
         <span className="text-xs text-brand-accent uppercase tracking-wider font-semibold mb-1">
           {produto.categoria}
@@ -63,7 +64,11 @@ export default function ProductCard({ produto }: ProductCardProps) {
           
           <button 
             disabled={produto.esgotado}
-            className={`p-2 rounded-full transition-colors ${produto.esgotado ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-brand text-white hover:bg-brand-dark shadow-md'}`}
+            onClick={(e) => {
+              e.preventDefault(); // Evita que o clique também acione algum link sem querer
+              adicionarItem(produto);
+            }}
+            className={`p-2 rounded-full transition-colors ${produto.esgotado ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-brand text-white hover:bg-brand-dark shadow-md transform hover:scale-110'}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

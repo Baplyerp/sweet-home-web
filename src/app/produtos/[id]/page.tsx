@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { produtosMock } from "@/lib/mockData";
 import Link from "next/link";
+import AddToCartButton from "@/components/AddToCartButton";
 
 export default async function ProdutoDetalhe({ params }: { params: Promise<{ id: string }> }) {
   // Aguardamos para ler o 'id' do URL
@@ -89,23 +90,7 @@ export default async function ProdutoDetalhe({ params }: { params: Promise<{ id:
           </div>
 
           {/* Botão de Adicionar ao Carrinho */}
-          <button
-            disabled={produto.esgotado}
-            className={`w-full py-4 rounded-full font-bold text-lg shadow-lg transition-all flex justify-center items-center gap-2 ${
-              produto.esgotado
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-brand-dark text-white hover:bg-brand hover:-translate-y-1"
-            }`}
-          >
-            {produto.esgotado ? "Produto Indisponível" : (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                </svg>
-                Adicionar ao Carrinho
-              </>
-            )}
-          </button>
+          <AddToCartButton produto={produto} />
         </div>
       </div>
     </div>
