@@ -1,47 +1,42 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import { produtosMock } from "@/lib/mockData";
+import { supabase } from "@/lib/supabase";
 
-export default function Home() {
-  // Filtramos apenas os produtos que têm a tag "destaque: true"
-  const produtosDestaque = produtosMock.filter(produto => produto.destaque);
+// Magia do Next.js: O site fica em cache e se atualiza a cada 60 segundos nos bastidores
+export const revalidate = 60; 
+
+export default async function Home() {
+  // Buscamos os destaques reais do Supabase
+  const { data: produtosDestaque } = await supabase
+    .from('vitrine_produtos')
+    .select('*')
+    .eq('destaque', true);
+
+  // Garantimos que seja um array vazio caso dê algum erro na busca
+  const produtos = produtosDestaque || [];
 
   return (
     <div className="flex flex-col min-h-screen">
-      
-      {/* HERO SECTION */}
+      {/* HERO SECTION (Mantida igual) */}
       <section className="relative bg-brand-dark text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand via-brand-dark to-brand-dark"></div>
-        
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 flex flex-col items-center text-center">
-          <span className="text-brand font-semibold tracking-wider uppercase text-sm mb-4">
-            Nova Coleção Outono/Inverno
-          </span>
+          <span className="text-brand font-semibold tracking-wider uppercase text-sm mb-4">Nova Coleção Outono/Inverno</span>
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 max-w-3xl">
             O toque de <span className="text-brand">conforto</span> que o seu lar merece.
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl">
             Descubra a nossa seleção premium de enxovais. Qualidade de hotel cinco estrelas, com o aconchego da sua casa.
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link 
-              href="/produtos" 
-              className="px-8 py-4 bg-brand text-white rounded-full font-bold shadow-lg hover:bg-white hover:text-brand-dark transition-all transform hover:-translate-y-1"
-            >
+            <Link href="/produtos" className="px-8 py-4 bg-brand text-white rounded-full font-bold shadow-lg hover:bg-white hover:text-brand-dark transition-all transform hover:-translate-y-1">
               Ver Catálogo Completo
-            </Link>
-            <Link 
-              href="/categorias?tipo=cama" 
-              className="px-8 py-4 bg-transparent border border-white text-white rounded-full font-bold hover:bg-white/10 transition-all"
-            >
-              Explorar Cama
             </Link>
           </div>
         </div>
       </section>
 
-      {/* SEÇÃO DE DESTAQUES (Agora com os Cards reais!) */}
+      {/* SEÇÃO DE DESTAQUES (Agora dinâmica!) */}
       <section className="py-16 bg-brand-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -49,15 +44,13 @@ export default function Home() {
             <p className="text-brand-accent">As escolhas favoritas dos nossos clientes para renovar a casa.</p>
           </div>
           
-          {/* Grid Responsivo de Produtos */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {produtosDestaque.map((produto) => (
+            {produtos.map((produto) => (
               <ProductCard key={produto.id} produto={produto} />
             ))}
           </div>
         </div>
       </section>
-
     </div>
   );
 }
