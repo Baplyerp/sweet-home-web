@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/contexts/CartContext";
+import CartDrawer from "@/components/CartDrawer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +21,15 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.className} flex flex-col min-h-screen bg-brand-light`}>
-        <Navbar />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+        {/* Tudo envolvido pelo provedor do carrinho */}
+        <CartProvider>
+          <Navbar />
+          <CartDrawer />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

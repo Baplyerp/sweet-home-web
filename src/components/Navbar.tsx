@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from 'react';
+import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalItens, toggleCart } = useCart();
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
