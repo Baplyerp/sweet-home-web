@@ -9,12 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // A PALETA CORRIGIDA: DNA BAPLY + SWEET HOME
         brand: {
-          brown: "#4A3525", // O Marrom profundo e elegante (Café/Madeira)
-          gold: "#C2A26C",  // O Ouro/Bronze da logo
-          base: "#FAF8F3",  // O fundo creme suave
-          neutral: "#2D3436" // Texto escuro
+          brown: "#4A3525", // Marrom Principal (Navbar, Footer, Títulos)
+          gold: "#C2A26C",  // Ouro (Botões, Destaques, Tags)
+          base: "#FAF8F3",  // Bege Claro (Fundo do site, muito elegante)
+          light: "#FFFFFF", // Branco Puro (Para cartões e áreas de conteúdo)
+          dark: "#2D241E"   // Marrom super escuro (Para textos)
         }
       },
       fontFamily: {
