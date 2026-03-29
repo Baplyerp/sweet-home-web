@@ -1,63 +1,77 @@
 import { supabase } from "@/lib/supabase";
 
-export const revalidate = 0; // O admin nunca deve ter cache, precisa ser sempre em tempo real
+export const revalidate = 0;
 
 export default async function AdminDashboard() {
-  // Buscamos todos os produtos diretamente da tabela original (não da view de vitrine)
-  const { data: produtos } = await supabase
-    .from('produtos')
-    .select('id, nome, preco, destaque, esgotado')
-    .order('nome');
-
-  const listaProdutos = produtos || [];
+  const { count: totalProdutos } = await supabase.from('produtos').select('*', { count: 'exact', head: true });
+  const { count: produtosDestaque } = await supabase.from('produtos').select('*', { count: 'exact', head: true }).eq('destaque', true);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="flex justify-between items-center border-b border-brand/20 pb-6 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-brand-dark">Painel de Controle</h1>
-          <p className="text-brand-accent mt-2">Gerenciamento manual da vitrine Sweet Home</p>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-brand-dark">Visão Geral</h1>
+        <p className="text-gray-500 mt-1">Gerencie o conteúdo do site sem precisar alterar o código.</p>
+      </div>
+
+      {/* Cards de Resumo */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+          <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-2">Produtos Cadastrados</h3>
+          <span className="text-4xl font-black text-brand-dark">{totalProdutos || 0}</span>
         </div>
-        <div className="bg-brand-dark text-white px-4 py-2 rounded-lg text-sm font-bold">
-          Admin Logado
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+          <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-2">Na Vitrine (Destaques)</h3>
+          <span className="text-4xl font-black text-brand">{produtosDestaque || 0}</span>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-center items-start">
+          <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-2">Integração API</h3>
+          <span className="px-3 py-1 bg-green-100 text-green-700 font-bold text-xs rounded-full">Conectado (Pronto para GestoBap)</span>
         </div>
       </div>
 
-      <div className="bg-white shadow-sm border border-brand/10 rounded-2xl overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-brand-light/50 border-b border-brand/10 text-brand-dark text-sm uppercase tracking-wider">
-              <th className="p-4 font-semibold">Produto</th>
-              <th className="p-4 font-semibold">Preço</th>
-              <th className="p-4 font-semibold text-center">Status (Estoque)</th>
-              <th className="p-4 font-semibold text-center">Vitrine (Destaque)</th>
-              <th className="p-4 font-semibold text-right">Ações</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-brand/5">
-            {listaProdutos.map((produto) => (
-              <tr key={produto.id} className="hover:bg-gray-50 transition-colors">
-                <td className="p-4 text-brand-dark font-medium">{produto.nome}</td>
-                <td className="p-4 text-brand-accent">R$ {produto.preco.toFixed(2)}</td>
-                <td className="p-4 text-center">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${produto.esgotado ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-                    {produto.esgotado ? 'Esgotado' : 'Em Estoque'}
-                  </span>
-                </td>
-                <td className="p-4 text-center">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${produto.destaque ? 'bg-brand text-white' : 'bg-gray-200 text-gray-600'}`}>
-                    {produto.destaque ? 'Em Destaque' : 'Oculto'}
-                  </span>
-                </td>
-                <td className="p-4 text-right">
-                  <button className="text-brand hover:text-brand-dark font-medium text-sm transition-colors">
-                    Editar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Área de Edição Low-Code (Preview da Estrutura) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        
+        {/* Editor de Banners */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+          <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+            <h2 className="text-lg font-bold text-brand-dark">Editar Hero Banner</h2>
+            <p className="text-sm text-gray-500">Altere a chamada principal da página inicial.</p>
+          </div>
+          <div className="p-6 flex-1 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Título Principal</label>
+              <input type="text" defaultValue="O toque de conforto que o seu lar merece." className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:border-brand focus:ring-1 focus:ring-brand outline-none" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Subtítulo (Tag)</label>
+              <input type="text" defaultValue="Nova Coleção Outono/Inverno" className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:border-brand focus:ring-1 focus:ring-brand outline-none" />
+            </div>
+            <button className="w-full bg-brand-dark text-white font-bold py-2 rounded-lg mt-4 hover:bg-brand transition-colors">
+              Salvar Alterações
+            </button>
+          </div>
+        </div>
+
+        {/* Gestão Rápida de Vitrine */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+          <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+            <h2 className="text-lg font-bold text-brand-dark">Acesso Rápido: Vitrine</h2>
+            <p className="text-sm text-gray-500">Adicione ou remova produtos da tela inicial.</p>
+          </div>
+          <div className="p-6 flex-1 flex flex-col justify-center items-center text-center border-2 border-dashed border-gray-200 m-6 rounded-xl">
+            <div className="text-brand mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mx-auto">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-brand-dark mb-4">Gerenciador de Grid</p>
+            <Link href="/admin/produtos" className="px-6 py-2 bg-brand text-white text-sm font-bold rounded-full hover:bg-brand-dark transition-colors">
+              Abrir Gerenciador Completo
+            </Link>
+          </div>
+        </div>
+
       </div>
     </div>
   );
