@@ -16,7 +16,7 @@ export default function ProductCard({ produto }: ProductCardProps) {
   };
 
   return (
-    <div className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-brand/10 relative">
+    <div className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-brand-brown/5 relative">
       
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
         {produto.esgotado && (
@@ -25,7 +25,7 @@ export default function ProductCard({ produto }: ProductCardProps) {
           </span>
         )}
         {produto.precoPromocional && !produto.esgotado && (
-          <span className="bg-brand text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+          <span className="bg-brand-gold text-brand-brown text-xs font-bold px-3 py-1 rounded-full shadow-md">
             Oferta
           </span>
         )}
@@ -40,12 +40,12 @@ export default function ProductCard({ produto }: ProductCardProps) {
       </Link>
 
       <div className="p-5 flex flex-col flex-grow">
-        <span className="text-xs text-brand-accent uppercase tracking-wider font-semibold mb-1">
+        <span className="text-xs text-brand-gold uppercase tracking-wider font-semibold mb-1">
           {produto.categoria}
         </span>
         
         <Link href={`/produtos/${produto.id}`}>
-          <h3 className="text-lg font-bold text-brand-dark mb-2 line-clamp-2 hover:text-brand transition-colors">
+          <h3 className="text-lg font-bold text-brand-brown mb-2 line-clamp-2 hover:text-brand-gold transition-colors">
             {produto.nome}
           </h3>
         </Link>
@@ -55,20 +55,20 @@ export default function ProductCard({ produto }: ProductCardProps) {
             {produto.precoPromocional ? (
               <div className="flex flex-col">
                 <span className="text-sm text-gray-400 line-through">{formatarPreco(produto.preco)}</span>
-                <span className="text-xl font-extrabold text-brand-dark">{formatarPreco(produto.precoPromocional)}</span>
+                <span className="text-xl font-extrabold text-brand-brown">{formatarPreco(produto.precoPromocional)}</span>
               </div>
             ) : (
-              <span className="text-xl font-extrabold text-brand-dark">{formatarPreco(produto.preco)}</span>
+              <span className="text-xl font-extrabold text-brand-brown">{formatarPreco(produto.preco)}</span>
             )}
           </div>
           
           <button 
             disabled={produto.esgotado}
             onClick={(e) => {
-              e.preventDefault(); // Evita que o clique também acione algum link sem querer
+              e.preventDefault();
               adicionarItem(produto);
             }}
-            className={`p-2 rounded-full transition-colors ${produto.esgotado ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-brand text-white hover:bg-brand-dark shadow-md transform hover:scale-110'}`}
+            className={`p-2 rounded-full transition-colors ${produto.esgotado ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-brand-brown text-white hover:bg-brand-gold hover:text-brand-brown shadow-md transform hover:scale-110'}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
