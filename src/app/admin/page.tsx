@@ -1,11 +1,15 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link"; // Adicione esta linha!
+import HeroEditor from "@/components/HeroEditor";
 
 export const revalidate = 0;
 
 export default async function AdminDashboard() {
   const { count: totalProdutos } = await supabase.from('produtos').select('*', { count: 'exact', head: true });
   const { count: produtosDestaque } = await supabase.from('produtos').select('*', { count: 'exact', head: true }).eq('destaque', true);
+  const { data: configs } = await supabase.from('configuracoes').select('*');
+  const heroTitulo = configs?.find(c => c.chave === 'hero_titulo')?.valor || 'O toque de conforto que o seu lar merece.';
+  const heroSubtitulo = configs?.find(c => c.chave === 'hero_subtitulo')?.valor || 'Nova Coleção Outono/Inverno';
 
   return (
     <div className="space-y-8">
@@ -39,6 +43,7 @@ export default async function AdminDashboard() {
             <h2 className="text-lg font-bold text-brand-dark">Editar Hero Banner</h2>
             <p className="text-sm text-gray-500">Altere a chamada principal da página inicial.</p>
           </div>
+          <HeroEditor tituloAtual={heroTitulo} subtituloAtual={heroSubtitulo} />
           <div className="p-6 flex-1 space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Título Principal</label>

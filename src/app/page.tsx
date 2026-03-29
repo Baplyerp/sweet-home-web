@@ -12,6 +12,11 @@ export default async function Home() {
     .select('*')
     .eq('destaque', true);
 
+  // Busca os textos do Hero Banner no Supabase
+  const { data: configs } = await supabase.from('configuracoes').select('*');
+  const heroTitulo = configs?.find(c => c.chave === 'hero_titulo')?.valor || 'O conforto que a sua casa merece.';
+  const heroSubtitulo = configs?.find(c => c.chave === 'hero_subtitulo')?.valor || 'Nova Coleção';
+
   // Garantimos que seja um array vazio caso dê algum erro na busca
   const produtos = produtosDestaque || [];
 
@@ -19,11 +24,12 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen">
       {/* HERO SECTION (Mantida igual) */}
       <section className="relative bg-brand-dark text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand via-brand-dark to-brand-dark"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 flex flex-col items-center text-center">
-          <span className="text-brand font-semibold tracking-wider uppercase text-sm mb-4">Nova Coleção Outono/Inverno</span>
+          <span className="text-brand font-semibold tracking-wider uppercase text-sm mb-4">
+            {heroSubtitulo}
+          </span>
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 max-w-3xl">
-            O toque de <span className="text-brand">conforto</span> que o seu lar merece.
+            {heroTitulo}
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl">
             Descubra a nossa seleção premium de enxovais. Qualidade de hotel cinco estrelas, com o aconchego da sua casa.
