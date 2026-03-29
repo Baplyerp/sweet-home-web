@@ -9,14 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // A PALETA CORRIGIDA: DNA BAPLY + SWEET HOME
         brand: {
-          // A mágica acontece aqui: O Tailwind vai ler a cor injetada pelo nosso banco de dados!
-          DEFAULT: "var(--theme-primary)", 
-          dark: "#B08D2E", 
-          light: "#F9F6EE",
-          accent: "#8A7322",
-        },
+          brown: "#4A3525", // O Marrom profundo e elegante (Café/Madeira)
+          gold: "#C2A26C",  // O Ouro/Bronze da logo
+          base: "#FAF8F3",  // O fundo creme suave
+          neutral: "#2D3436" // Texto escuro
+        }
       },
+      fontFamily: {
+        headings: ["var(--font-playfair)", "serif"],
+        body: ["var(--font-inter)", "sans-serif"],
+      }
     },
   },
   plugins: [],

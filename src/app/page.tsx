@@ -1,62 +1,81 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { supabase } from "@/lib/supabase";
+import Image from "next/image";
 
-// Magia do Next.js: O site fica em cache e se atualiza a cada 60 segundos nos bastidores
 export const revalidate = 60; 
 
 export default async function Home() {
-  // Buscamos os destaques reais do Supabase
   const { data: produtosDestaque } = await supabase
     .from('vitrine_produtos')
     .select('*')
     .eq('destaque', true);
 
-  // Busca os textos do Hero Banner no Supabase
-  const { data: configs } = await supabase.from('configuracoes').select('*');
-  const heroTitulo = configs?.find(c => c.chave === 'hero_titulo')?.valor || 'O conforto que a sua casa merece.';
-  const heroSubtitulo = configs?.find(c => c.chave === 'hero_subtitulo')?.valor || 'Nova Coleção';
-
-  // Garantimos que seja um array vazio caso dê algum erro na busca
   const produtos = produtosDestaque || [];
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* HERO SECTION (Mantida igual) */}
-      <section className="relative bg-brand-dark text-white overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 flex flex-col items-center text-center">
-          <span className="text-brand font-semibold tracking-wider uppercase text-sm mb-4">
-            {heroSubtitulo}
-          </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 max-w-3xl">
-            {heroTitulo}
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl">
-            Descubra a nossa seleção premium de enxovais. Qualidade de hotel cinco estrelas, com o aconchego da sua casa.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/produtos" className="px-8 py-4 bg-brand text-white rounded-full font-bold shadow-lg hover:bg-white hover:text-brand-dark transition-all transform hover:-translate-y-1">
-              Ver Catálogo Completo
-            </Link>
+      
+      {/* HERO SECTION PREMIUM */}
+      <section className="relative bg-brand-base min-h-[90vh] flex items-center">
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/images/hero-bg.png" 
+            alt="Ambiente Sweet Home"
+            fill
+            className="object-cover object-center brightness-90"
+            priority
+          />
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          {/* Fundo Marrom Translúcido no Bloco */}
+          <div className="max-w-2xl bg-brand-brown/80 backdrop-blur-md p-12 rounded-3xl border border-white/10 text-white shadow-2xl">
+            <span className="text-brand-gold font-semibold tracking-wider uppercase text-sm mb-4 block">
+              Nova Coleção
+            </span>
+            <h1 className="text-5xl md:text-6xl font-headings font-extrabold tracking-tight mb-6 leading-tight">
+              O toque de <span className="text-brand-gold">conforto</span> que o seu lar merece.
+            </h1>
+            <p className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed font-light">
+              Descubra a nossa seleção exclusiva de enxovais. Qualidade premium, com o aconchego da sua casa.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-5">
+              <Link 
+                href="/produtos" 
+                className="px-10 py-4 bg-brand-gold text-brand-brown rounded-full font-bold text-lg shadow-lg hover:brightness-110 transition-all transform hover:-translate-y-1 text-center"
+              >
+                Ver Catálogo
+              </Link>
+              <Link 
+                href="/categorias?tipo=cama" 
+                className="px-10 py-4 bg-transparent border border-white text-white rounded-full font-bold hover:bg-white/10 transition-all text-center"
+              >
+                Explorar Cama
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SEÇÃO DE DESTAQUES (Agora dinâmica!) */}
-      <section className="py-16 bg-brand-light">
+      {/* SEÇÃO DE DESTAQUES */}
+      <section className="py-24 bg-brand-base">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-brand-dark mb-4">Os Mais Amados</h2>
-            <p className="text-brand-accent">As escolhas favoritas dos nossos clientes para renovar a casa.</p>
+          <div className="text-center mb-16 space-y-3">
+            {/* Título no Marrom Premium */}
+            <h2 className="text-4xl font-headings font-bold text-brand-brown">Os Mais Amados</h2>
+            <p className="text-brand-neutral/70 max-w-lg mx-auto">As escolhas favoritas dos nossos clientes para renovar a casa.</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
             {produtos.map((produto) => (
               <ProductCard key={produto.id} produto={produto} />
             ))}
           </div>
         </div>
       </section>
+
     </div>
   );
 }
