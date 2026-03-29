@@ -25,14 +25,15 @@ export default function Navbar({ logoUrl = '/images/logo.png' }: { logoUrl?: str
             </Link>
           </div>
 
+          {/* Barra de Busca Premium Iluminada */}
           <div className="hidden md:flex flex-1 max-w-md mx-10">
-            <div className="relative w-full">
+            <div className="relative w-full group">
               <input 
                 type="text" 
-                placeholder="Buscar lençóis egípcios, toalhas banhão..." 
-                className="w-full pl-5 pr-12 py-3 rounded-full bg-white/5 border border-white/10 text-white placeholder:text-white/50 text-sm focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none"
+                placeholder="Buscar lençóis, toalhas, cobre-leitos..." 
+                className="w-full pl-5 pr-12 py-3 rounded-full bg-brand-base text-brand-brown placeholder:text-brand-brown/50 text-sm focus:border-brand-gold focus:ring-2 focus:ring-brand-gold outline-none shadow-inner transition-all"
               />
-              <button className="absolute right-4 top-3 text-white/50 hover:text-brand-gold transition-colors">
+              <button className="absolute right-4 top-3 text-brand-brown/50 group-hover:text-brand-gold transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
