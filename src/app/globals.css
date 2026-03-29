@@ -1,9 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* O novo motor do Tailwind v4 funciona aqui! */
+@theme {
+  /* Nossa Paleta Premium */
+  --color-brand-brown: #4A3525;
+  --color-brand-gold: #C2A26C;
+  --color-brand-base: #FAF8F3;
+  --color-brand-light: #FFFFFF;
+  --color-brand-dark: #2D241E;
+
+  /* Nossas Fontes Premium */
+  --font-headings: var(--font-playfair), serif;
+  --font-body: var(--font-inter), sans-serif;
+}
 
 @layer base {
   body {
+    /* Agora ele reconhece o bg-brand-base e o font-body perfeitamente */
     @apply bg-brand-base text-brand-dark font-body antialiased;
   }
 }
