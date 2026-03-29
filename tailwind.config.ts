@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          // Aqui está a mágica: O Tailwind agora lê a cor injetada pelo nosso banco de dados!
+          // A mágica acontece aqui: O Tailwind vai ler a cor injetada pelo nosso banco de dados!
           DEFAULT: "var(--theme-primary)", 
           dark: "#B08D2E", 
           light: "#F9F6EE",
