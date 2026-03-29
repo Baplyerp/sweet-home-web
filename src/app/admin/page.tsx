@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import Link from "next/link"; // Adicione esta linha!
 
 export const revalidate = 0;
 
